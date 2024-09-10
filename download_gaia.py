@@ -11,10 +11,10 @@ import sys
 from requests.exceptions import ChunkedEncodingError
 
 # Base URL of the webpage
-base_url = "http://cdn.gea.esac.esa.int/Gaia/gdr1/gaia_source/fits/"
+base_url = "http://cdn.gea.esac.esa.int/Gaia/gdr3/gaia_source/"
 
 # Directory to save downloaded files
-local_base_dir = "/mnt/nas/gaia_data/gdr1/gaia_source/fits"
+local_base_dir = "/mnt/nas/gaia_data/gdr3/gaia_source"
 
 # Number of threads
 num_threads = 100
@@ -85,7 +85,7 @@ def fetch_fits_files(url):
     response = requests.get(url)
     response.raise_for_status()
     soup = BeautifulSoup(response.text, 'html.parser')
-    fits_files = [urljoin(url, link.get('href')) for link in soup.find_all('a') if link.get('href').endswith('.fits')]
+    fits_files = [urljoin(url, link.get('href')) for link in soup.find_all('a') if link.get('href').endswith('.gz')]
     return fits_files
 
 if __name__ == "__main__":
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     fits_files = fetch_fits_files(base_url)
     total_files = len(fits_files)
 
-    print(f"Found {total_files} .fits files to download.")
+    print(f"Found {total_files} .csv files to download.")
 
     queue = Queue()
 
